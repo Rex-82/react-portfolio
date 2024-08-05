@@ -1,7 +1,7 @@
 export default [
 	{
 		title: "RecipeBot",
-		url: "https://github.com/S1mplyD/RecipeBotReborn",
+		url: "https://top.gg/bot/657369551121678346",
 		description:
 			"A Discord application used in 1000+ servers that sends recipes to users with features such as filters, timer, categories, ecc.",
 		technologies: ["DiscordJs", "Typescript"],
