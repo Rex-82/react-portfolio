@@ -1,0 +1,30 @@
+# Deploy app
+
+name: Node.js CD
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy using ssh
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: ${{ secrets.PORT }} 
+        script: |
+          cd ~/repos/react-portfolio
+          git pull origin master
+          git status
+          npm install --only=prod
+          if [ $(docker ps -q -f name=react-portfolio) ]; then
+            docker-compose down
+          fi
+          docker-compose build -t react-portfolio .
+          docker-compose up -d
