@@ -1,4 +1,6 @@
-export default function Project({ title, url, description, technologies }) {
+import projectsData from "../utils/projects-data.js";
+
+function Project({ title, url, description, technologies }) {
   return (
     <article>
       <a title={title} href={url}>
@@ -15,4 +17,15 @@ export default function Project({ title, url, description, technologies }) {
       </a>
     </article>
   );
+}
+export default function Projects() {
+  return projectsData.map((project) => (
+    <Project
+      key={project.url}
+      title={project.title}
+      url={project.url}
+      description={project.description}
+      technologies={project.technologies}
+    />
+  ));
 }

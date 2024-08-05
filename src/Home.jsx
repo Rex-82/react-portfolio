@@ -1,19 +1,12 @@
-import Project from "./Project";
-import projects from "../utils/Projects.js";
+import Projects from "./Projects";
+import Footer from "./Footer.jsx";
 
 export default function Home() {
-  return (
-    <>
-      <h1>Home</h1>
-      {projects.map((project) => (
-        <Project
-          key={project.url}
-          title={project.title}
-          url={project.url}
-          description={project.description}
-          technologies={project.technologies}
-        />
-      ))}
-    </>
-  );
+	return (
+		<>
+			<h1>Simone Ferretti</h1>
+			<Projects />
+			<Footer />
+		</>
+	);
 }
