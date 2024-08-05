@@ -1,9 +1,9 @@
 # This workflow will do a clean install of node dependencies
-name: Node.js CI
+name: Install and build
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
