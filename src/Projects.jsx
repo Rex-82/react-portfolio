@@ -1,13 +1,15 @@
 import projectsData from "../utils/projects-data.js";
+import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 
 function Project({ title, url, description, technologies }) {
   return (
     <article>
       <a title={title} href={url}>
-        <div class="project-card">
-          <h3 class="projects-title">{title}</h3>
+        <div>
+          <h3>{title}</h3>
+          <OpenInNewRoundedIcon />
           <p>{description}</p>
-          <div class="made-with">
+          <div>
             <p1>Made with:</p1>
             {technologies.map((technology) => (
               <p2 key={technology}>{technology}</p2>
