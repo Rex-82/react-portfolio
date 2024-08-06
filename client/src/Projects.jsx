@@ -1,22 +1,26 @@
+import "./Projects.css";
 import projectsData from "../utils/projects-data.js";
 import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 
 function Project({ title, url, description, technologies }) {
   return (
-    <article>
+    <article className="project-article">
       <a title={title} href={url}>
-        <div>
+        <div className="flex-container project-heading">
           <h3>{title}</h3>
-          <OpenInNewRoundedIcon />
-          <p>{description}</p>
-          <div>
-            <p1>Made with:</p1>
-            {technologies.map((technology) => (
-              <p2 key={technology}>{technology}</p2>
-            ))}
+          <div className="title_link-icon">
+            <OpenInNewRoundedIcon fontSize="small" />
           </div>
         </div>
+        <p className="project-description">{description}</p>
       </a>
+      <div className="technologies">
+        {technologies.map((tech) => (
+          <a key={tech} title={tech.name} href={tech.url}>
+            {tech.name}
+          </a>
+        ))}
+      </div>
     </article>
   );
 }
