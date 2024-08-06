@@ -7,16 +7,6 @@
 
   --transition-time: 150ms;
   --transition-curve: ease-in-out;
-
-  --primary: #0d0d0d;
-  --secondary: #59443f;
-  --tertiary: #8d7267;
-  --accent: #bf9c88;
-  --accent2: #f2bc8e;
-  --text: hsl(28, 20%, 95%);
-
-  background-color: var(--primary);
-  color: var(--text);
 }
 
 body {
