@@ -1,4 +1,3 @@
-import "./Projects.css";
 import projectsData from "../utils/projects-data.js";
 import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
 
