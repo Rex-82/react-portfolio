@@ -1,34 +1,39 @@
 import projectsData from "../utils/projects-data.js";
-import OpenInNewRoundedIcon from "@mui/icons-material/OpenInNewRounded";
+import { Card, Link, Typography, Chip, Stack } from "@mui/joy";
 
 function Project({ title, url, description, technologies }) {
 	return (
-		<article className="project-article">
-			<a title={title} href={url}>
-				<div className="flex-container project-heading">
-					<h3>{title}</h3>
-					<OpenInNewRoundedIcon fontSize="small" />
-				</div>
-				<p className="project-description">{description}</p>
-			</a>
-			<div className="technologies">
+		<Card>
+			<Link overlay underline="none" title={title} href={url}>
+				<Typography level="title2">{title}</Typography>
+			</Link>
+			<Typography level="callout">{description}</Typography>
+			<Stack direction="row" spacing={1}>
 				{technologies.map((tech, i) => (
-					<a key={i} title={tech.name} href={tech.url}>
-						{tech.name}
-					</a>
+					<Chip
+						variant="outlined"
+						key={i}
+						slotProps={{ action: { component: "a", href: tech.url } }}
+					>
+						<Typography level="caption1">{tech.name}</Typography>
+					</Chip>
 				))}
-			</div>
-		</article>
+			</Stack>
+		</Card>
 	);
 }
 export default function Projects() {
-	return projectsData.map((project) => (
-		<Project
-			key={project.url}
-			title={project.title}
-			url={project.url}
-			description={project.description}
-			technologies={project.technologies}
-		/>
-	));
+	return (
+		<Stack direction="column" spacing={2}>
+			{projectsData.map((project) => (
+				<Project
+					key={project.url}
+					title={project.title}
+					url={project.url}
+					description={project.description}
+					technologies={project.technologies}
+				/>
+			))}
+		</Stack>
+	);
 }

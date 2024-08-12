@@ -1,12 +1,12 @@
 import Projects from "./Projects";
 import Footer from "./Footer.jsx";
-import Toggle from "./Toggle.jsx";
+import { Typography } from "@mui/joy";
 
 export default function Home() {
 	return (
 		<>
-			<Toggle />
-			<h1>Simone Ferretti</h1>
+			<Typography level="title1">Simone Ferretti</Typography>
+			<Projects />
 			<Projects />
 			<Footer />
 		</>
