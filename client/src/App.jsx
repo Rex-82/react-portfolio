@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { CssBaseline } from "@mui/joy";
 
 import Home from "./Home";
 import NotFound from "./NotFound";
@@ -11,6 +12,7 @@ export default function App() {
 
 	return (
 		<>
+			<CssBaseline />
 			<div className={`${theme}`}>
 				<Router>
 					<Routes>
