@@ -1,7 +1,7 @@
-import ProjectsData from "utils/ProjectsData.js";
 import { Card, Link, Typography, Chip, Stack } from "@mui/joy";
+import { useEffect, useState } from "react";
 
-function Project({ title, url, description, technologies }) {
+function Project({ title, url, description, topics }) {
 	return (
 		<Card
 			sx={{
@@ -16,13 +16,9 @@ function Project({ title, url, description, technologies }) {
 			</Link>
 			<Typography level="callout">{description}</Typography>
 			<Stack direction="row" spacing={1}>
-				{technologies.map((tech, i) => (
-					<Chip
-						variant="outlined"
-						key={i}
-						slotProps={{ action: { component: "a", href: tech.url } }}
-					>
-						<Typography level="caption1">{tech.name}</Typography>
+				{topics?.map((topic, i) => (
+					<Chip variant="outlined" key={i}>
+						<Typography level="caption1">{topic}</Typography>
 					</Chip>
 				))}
 			</Stack>
@@ -30,17 +26,37 @@ function Project({ title, url, description, technologies }) {
 	);
 }
 export default function Projects() {
+	const [data, setData] = useState([]);
+
+	useEffect(() => {
+		fetch("https://api.github.com/users/Rex-82/repos")
+			.then((response) => {
+				if (response.ok) return response.json();
+				throw new Error(`Response status: ${response.status}`);
+			})
+			.then((json) => {
+				setTimeout(() => setData(json), 4000);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	});
+
 	return (
 		<Stack direction="column" spacing={2}>
-			{ProjectsData.map((project) => (
-				<Project
-					key={project.url}
-					title={project.title}
-					url={project.url}
-					description={project.description}
-					technologies={project.technologies}
-				/>
-			))}
+			{data?.map((repo) => {
+				if (!repo.fork && repo.description !== null) {
+					return (
+						<Project
+							key={repo.id}
+							title={repo.name}
+							url={repo.html_url}
+							description={repo.description}
+							topics={repo.topics}
+						/>
+					);
+				}
+			})}
 		</Stack>
 	);
 }
