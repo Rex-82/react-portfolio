@@ -13,7 +13,6 @@ export default function App() {
 	return (
 		<CssVarsProvider defaultMode="system" theme={CustomTheme}>
 			<CssBaseline />
-			<ModeToggle />
 			<Router>
 				<Routes>
 					<Route path="/" element={<Home />} />
