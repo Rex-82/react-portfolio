@@ -1,9 +1,16 @@
-import projectsData from "../utils/projects-data.js";
+import ProjectsData from "utils/ProjectsData.js";
 import { Card, Link, Typography, Chip, Stack } from "@mui/joy";
 
 function Project({ title, url, description, technologies }) {
 	return (
-		<Card>
+		<Card
+			sx={{
+				position: { sm: "relative" },
+				"&:hover": {
+					bottom: { sm: "10px" },
+				},
+			}}
+		>
 			<Link overlay underline="none" title={title} href={url}>
 				<Typography level="title2">{title}</Typography>
 			</Link>
@@ -25,7 +32,7 @@ function Project({ title, url, description, technologies }) {
 export default function Projects() {
 	return (
 		<Stack direction="column" spacing={2}>
-			{projectsData.map((project) => (
+			{ProjectsData.map((project) => (
 				<Project
 					key={project.url}
 					title={project.title}

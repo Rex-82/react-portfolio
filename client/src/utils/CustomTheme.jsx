@@ -1,6 +1,15 @@
 import { extendTheme } from "@mui/joy";
 
-const customTheme = extendTheme({
+const CustomTheme = extendTheme({
+	breakpoints: {
+		values: {
+			xs: 0,
+			sm: 600,
+			md: 768,
+			lg: 1025,
+			xl: 1536,
+		},
+	},
 	components: {
 		JoyTypography: {
 			defaultProps: {
@@ -83,4 +92,4 @@ const customTheme = extendTheme({
 	},
 });
 
-export default customTheme;
+export default CustomTheme;

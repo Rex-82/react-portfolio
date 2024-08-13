@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
-import { ThemeProvider } from "./Theme.jsx";
+import { ThemeProvider } from "utils/Theme.jsx";
 import "@fontsource/inter";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
