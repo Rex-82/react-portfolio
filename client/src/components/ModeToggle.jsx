@@ -1,11 +1,9 @@
 import { useColorScheme } from "@mui/joy/styles";
 import { Chip } from "@mui/joy";
 import { LightMode, ModeNight, Adjust } from "@mui/icons-material";
-import { useState } from "react";
 
 export default function ModeToggle() {
 	const { mode, setMode } = useColorScheme();
-	const [currentState, setCurrentState] = useState("system");
 
 	const states = {
 		light: {
@@ -22,19 +20,19 @@ export default function ModeToggle() {
 		},
 	};
 
+	const stateCycle = ["light", "dark", "system"];
+
 	function changeState() {
-		if (currentState === "dark") setCurrentState("system");
-		else if (currentState === "system") setCurrentState("light");
-		else if (currentState === "light") setCurrentState("dark");
-		console.log(currentState, mode);
-		setMode(currentState);
+		const nextState =
+			stateCycle[(stateCycle.indexOf(mode) + 1) % stateCycle.length];
+
+		setMode(nextState);
 	}
 
 	return (
 		<Chip
-			variant="outlined"
+			variant="soft"
 			startDecorator={states[mode].icon}
-			color="neutral"
 			onClick={changeState}
 		>
 			{states[mode].name}
