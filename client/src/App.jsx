@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { CssBaseline } from "@mui/joy";
 import { CssVarsProvider } from "@mui/joy/styles";
+import InitColorSchemeScript from "@mui/joy/InitColorSchemeScript";
 
 import Home from "pages/Home";
 import NotFound from "pages/NotFound";
@@ -9,11 +10,13 @@ import Dotfiles from "pages/Dotfiles";
 
 import Header from "components/Header";
 import Footer from "components/Footer";
+
 import CustomTheme from "utils/CustomTheme";
 
 export default function App() {
 	return (
 		<>
+			<InitColorSchemeScript />
 			<CssVarsProvider defaultMode="system" theme={CustomTheme}>
 				<CssBaseline />
 				<Header />
