@@ -1,5 +1,5 @@
-import { Card, Link, Typography, Chip, Stack } from "@mui/joy";
-import { useEffect, useState } from "react";
+import { Card, Link, Typography, Chip, Stack, Box } from "@mui/joy";
+import queryData from "utils/QueryData";
 
 function Project({ title, url, description, topics }) {
 	return (
@@ -26,25 +26,21 @@ function Project({ title, url, description, topics }) {
 	);
 }
 export default function Projects() {
-	const [data, setData] = useState([]);
+	const endpoint = "https://api.github.com/users/Rex-82/repos";
+	const queryKey = ["reposData"];
 
-	useEffect(() => {
-		fetch("https://api.github.com/users/Rex-82/repos")
-			.then((response) => {
-				if (response.ok) return response.json();
-				throw new Error(`Response status: ${response.status}`);
-			})
-			.then((json) => {
-				setTimeout(() => setData(json), 4000);
-			})
-			.catch((error) => {
-				console.error(error);
-			});
-	});
+	const { status, data, error } = queryData(queryKey, endpoint);
+
+	if (status === "pending") {
+		return "Loading...";
+	}
+	if (status === "error") {
+		return `An error has occured: ${error.message}`;
+	}
 
 	return (
 		<Stack direction="column" spacing={2}>
-			{data?.map((repo) => {
+			{data.map((repo) => {
 				if (!repo.fork && repo.description !== null) {
 					return (
 						<Project
