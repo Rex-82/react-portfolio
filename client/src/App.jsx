@@ -23,8 +23,8 @@ export default function App() {
 				<InitColorSchemeScript />
 				<CssVarsProvider defaultMode="system" theme={CustomTheme}>
 					<CssBaseline />
-					<Header />
 					<Router>
+						<Header />
 						<Routes>
 							<Route path="/" element={<Home />} />
 							<Route path="/dotfiles" element={<Dotfiles />} />

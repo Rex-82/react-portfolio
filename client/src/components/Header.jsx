@@ -1,5 +1,7 @@
 import { Box, Stack } from "@mui/joy";
 import ModeToggle from "components/ModeToggle";
+import { Link as RouterLink } from "react-router-dom";
+import { Link } from "@mui/joy";
 
 export default function Header() {
 	return (
@@ -17,7 +19,15 @@ export default function Header() {
 			position="sticky"
 			top={0}
 		>
-			<Stack direction="row" justifyContent="end" spacing={2}>
+			<Stack direction="row" justifyContent="space-between" spacing={2}>
+				<Box>
+					<Link padding="0.25em" component={RouterLink} to="/">
+						home
+					</Link>
+					<Link padding="0.25em" component={RouterLink} to="/dotfiles">
+						dotfiles
+					</Link>
+				</Box>
 				<ModeToggle />
 			</Stack>
 		</Box>
