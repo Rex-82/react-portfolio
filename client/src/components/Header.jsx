@@ -20,7 +20,7 @@ export default function Header() {
 			top={0}
 		>
 			<Stack direction="row" justifyContent="space-between" spacing={2}>
-				<Box>
+				<Box component="nav">
 					<Link padding="0.25em" component={RouterLink} to="/">
 						home
 					</Link>
