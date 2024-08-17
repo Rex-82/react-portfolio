@@ -29,6 +29,11 @@ const CustomTheme = extendTheme({
 				},
 			},
 		},
+		JoySkeleton: {
+			defaultProps: {
+				animation: "pulse",
+			},
+		},
 	},
 	typography: {
 		display1: undefined,
