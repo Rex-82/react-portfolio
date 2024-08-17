@@ -3,9 +3,25 @@ import SocialsData from "utils/SocialsData";
 
 export default function Footer() {
 	return (
-		<Box component="footer" sx={{ padding: "2em 0" }}>
+		<Box
+			component="footer"
+			sx={(theme) => ({
+				padding: "2rem",
+				marginTop: "2rem",
+				backgroundColor: [theme.palette.background.level1],
+				borderTopWidth: [theme.lineHeight.md],
+				borderTopStyle: "solid",
+				borderTopColor: [theme.palette.divider],
+			})}
+		>
 			<Typography level="title3">Links</Typography>
-			<Stack direction="row" spacing={2} flexWrap="wrap">
+			<Stack
+				direction="row"
+				flexWrap="wrap"
+				gap={2}
+				paddingTop="1rem"
+				justifyContent="center"
+			>
 				{SocialsData.map((link, i) => (
 					<Chip
 						key={i}
