@@ -1,9 +1,16 @@
-import { Box, Stack } from "@mui/joy";
+import { Box, Stack, Button } from "@mui/joy";
 import ModeToggle from "components/ModeToggle";
 import { Link as RouterLink } from "react-router-dom";
-import { Link } from "@mui/joy";
+import { useLocation } from "react-router-dom";
 
 export default function Header() {
+	const { hash, pathname, search } = useLocation();
+
+	const links = [
+		{ name: "home", href: "/" },
+		{ name: "dotfiles", href: "/dotfiles" },
+	];
+
 	return (
 		<Box
 			component="header"
@@ -21,12 +28,25 @@ export default function Header() {
 		>
 			<Stack direction="row" justifyContent="space-between" spacing={2}>
 				<Box component="nav">
-					<Link padding="0.25em" component={RouterLink} to="/">
-						home
-					</Link>
-					<Link padding="0.25em" component={RouterLink} to="/dotfiles">
-						dotfiles
-					</Link>
+					{links.map((link, i) => {
+						return (
+							<Button
+								key={i}
+								padding="0.25em"
+								component={RouterLink}
+								to={link.href}
+								variant="plain"
+								sx={(theme) => ({
+									color:
+										link.href === pathname
+											? [theme.palette.common[400]]
+											: [theme.palette.text.primary],
+								})}
+							>
+								{link.name}
+							</Button>
+						);
+					})}
 				</Box>
 				<ModeToggle />
 			</Stack>

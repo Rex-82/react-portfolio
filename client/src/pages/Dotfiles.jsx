@@ -5,6 +5,7 @@ import {
 	Tooltip,
 	ButtonGroup,
 	CardOverflow,
+	Divider,
 } from "@mui/joy";
 import { OpenInNew, FileCopy } from "@mui/icons-material";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -17,6 +18,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import shell from "react-syntax-highlighter/dist/esm/languages/prism/shell-session";
 import { useTheme } from "@emotion/react";
 import { useEffect, useState, memo } from "react";
+import { DotfileSkeleton } from "components/Skeletons";
 
 const Dotfiles = memo(function Dotfiles() {
 	const theme = useTheme();
@@ -39,9 +41,14 @@ const Dotfiles = memo(function Dotfiles() {
 		{ name: ".zshrc", path: ".config/zsh/.zshrc" },
 	];
 
+	const domain = {
+		api: "api.github.com",
+		http: "www.github.com",
+	};
+
 	const urls = files.map(
 		(file) =>
-			`https://api.github.com/repos/${repo}/contents/${file.path}?ref=${branch}`,
+			`https://${domain.api}/repos/${repo}/contents/${file.path}?ref=${branch}`,
 	);
 
 	// Function to fetch file content
@@ -60,21 +67,30 @@ const Dotfiles = memo(function Dotfiles() {
 	// Check if data is already in cache
 	let data = queryClient.getQueryData("dotfilesData");
 
-	if (!data) {
-		// Use useQuery to fetch the data if it's not in cache
-		const {
-			status,
-			data: queryData,
-			error,
-		} = useQuery({
-			queryKey: ["dotfilesData"],
-			queryFn: () => Promise.all(urls.map(fetchFileContent)),
-			staleTime: 1000 * 60 * 60, // 1 hour in milliseconds
-			enabled: isQueryEnabled, // Enable the query based on state
-		});
+	// Use useQuery to fetch the data if it's not in cache
+	const {
+		status,
+		data: queryData,
+		error,
+	} = useQuery({
+		queryKey: ["dotfilesData"],
+		queryFn: () => Promise.all(urls.map(fetchFileContent)),
+		staleTime: 1000 * 60 * 60, // 1 hour in milliseconds
+		enabled: isQueryEnabled && !data, // Enable the query based on state
+	});
 
-		if (status === "pending" || status === "loading") {
-			return "Loading...";
+	if (!data) {
+		if (status === "pending") {
+			return (
+				<>
+					<Typography level="title1">Dotfiles</Typography>
+					<Stack direction="column" spacing={2}>
+						<DotfileSkeleton />
+						<DotfileSkeleton />
+						<DotfileSkeleton />
+					</Stack>
+				</>
+			);
 		}
 		if (status === "error") {
 			return `An error has occurred: ${error.message}`;
@@ -85,7 +101,13 @@ const Dotfiles = memo(function Dotfiles() {
 	}
 	return (
 		<>
-			<Typography level="title1">Dotfiles</Typography>
+			<Typography level="title1" padding="0.5rem">
+				Dotfiles
+			</Typography>
+			<Divider orientation="horizontal" />
+			<Typography level="body" padding="0.5rem">
+				Below you can find the dotfiles used on my system.
+			</Typography>
 			<Stack direction="column" spacing={2}>
 				{data.map((d, i) => (
 					<CardOverflow
@@ -104,7 +126,8 @@ const Dotfiles = memo(function Dotfiles() {
 								borderTopRightRadius: [theme.radius.md],
 								borderTopLeftRadius: [theme.radius.md],
 								backgroundColor: [theme.palette.background.level2],
-								padding: "0 0.5em",
+								paddingLeft: "0.5em",
+								paddingRight: "0.625em",
 							})}
 							justifyContent="space-between"
 						>
@@ -116,7 +139,11 @@ const Dotfiles = memo(function Dotfiles() {
 								})}
 							>
 								<Tooltip arrow title="Go to github repository">
-									<IconButton>
+									<IconButton
+										component="a"
+										href={`https://${domain.http}/${repo}/tree/${branch}`}
+										target="_blank"
+									>
 										<OpenInNew />
 									</IconButton>
 								</Tooltip>

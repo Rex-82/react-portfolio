@@ -1,30 +1,7 @@
-import { Card, Link, Typography, Chip, Stack } from "@mui/joy";
+import { Stack } from "@mui/joy";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-
-function Project({ title, url, description, topics }) {
-	return (
-		<Card
-			sx={{
-				position: { sm: "relative" },
-				"&:hover": {
-					bottom: { sm: "10px" },
-				},
-			}}
-		>
-			<Link overlay underline="none" title={title} href={url}>
-				<Typography level="title2">{title}</Typography>
-			</Link>
-			<Typography level="callout">{description}</Typography>
-			<Stack direction="row" spacing={1}>
-				{topics?.map((topic, i) => (
-					<Chip variant="outlined" key={i}>
-						<Typography level="caption1">{topic}</Typography>
-					</Chip>
-				))}
-			</Stack>
-		</Card>
-	);
-}
+import Project from "components/Project";
+import { ProjectSkeleton } from "./Skeletons";
 
 export default function Projects() {
 	const queryClient = useQueryClient();
@@ -40,20 +17,28 @@ export default function Projects() {
 	// Check if the data is already cached
 	let data = queryClient.getQueryData("repoData");
 
-	// If data is not cached, use the query hook to fetch it
-	if (!data) {
-		const {
-			status,
-			data: queryData,
-			error,
-		} = useQuery({
-			queryKey: ["repoData"],
-			queryFn: fetchRepoData,
-			staleTime: 1000 * 60 * 60, // 1 hour in milliseconds
-		});
+	const {
+		status,
+		data: queryData,
+		error,
+	} = useQuery({
+		queryKey: ["repoData"],
+		queryFn: fetchRepoData,
+		staleTime: 1000 * 60 * 60, // 1 hour in milliseconds
+		enabled: !data,
+	});
 
-		if (status === "loading") {
-			return "Loading...";
+	if (!data) {
+		if (status === "pending") {
+			return (
+				<Stack direction="column" spacing={2}>
+					<ProjectSkeleton />
+					<ProjectSkeleton />
+					<ProjectSkeleton />
+					<ProjectSkeleton />
+					<ProjectSkeleton />
+				</Stack>
+			);
 		}
 		if (status === "error") {
 			return `An error has occurred: ${error.message}`;
