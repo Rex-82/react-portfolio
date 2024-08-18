@@ -47,11 +47,11 @@ export default function Projects() {
 		data = queryData;
 	}
 
-	// Filter and map over the data to render the projects
 	return (
 		<Stack direction="column" spacing={2}>
 			{data
 				?.filter((repo) => !repo.fork && repo.description !== null)
+				.sort((a, b) => b.updated_at.localeCompare(a.updated_at))
 				.map((repo) => (
 					<Project
 						key={repo.id}
