@@ -3,6 +3,8 @@ import { CssBaseline } from "@mui/joy";
 import { CssVarsProvider } from "@mui/joy/styles";
 import InitColorSchemeScript from "@mui/joy/InitColorSchemeScript";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Suspense } from "react";
+import { DotfileSkeleton } from "./components/Skeletons";
 
 const queryClient = new QueryClient();
 
@@ -41,12 +43,26 @@ export default function App() {
 							<Route
 								path="/dotfiles"
 								element={
-									<Dotfiles>
-										<PageDesc
-											title="Dotfiles"
-											description="Below you can see the files i use in my linux system"
-										/>
-									</Dotfiles>
+									<Suspense
+										fallback={
+											<>
+												<PageDesc
+													title="Dotfiles"
+													description="Below you can see the files i use in my linux system"
+												/>
+												<DotfileSkeleton />
+												<DotfileSkeleton />
+												<DotfileSkeleton />
+											</>
+										}
+									>
+										<Dotfiles>
+											<PageDesc
+												title="Dotfiles"
+												description="Below you can see the files i use in my linux system"
+											/>
+										</Dotfiles>
+									</Suspense>
 								}
 							/>
 							{/* <Route path="/typography" element={<ThemeTypography />} /> */}
