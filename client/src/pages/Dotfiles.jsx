@@ -7,21 +7,41 @@ import {
 	CardOverflow,
 	Divider,
 } from "@mui/joy";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState, memo } from "react";
+
 import { OpenInNew, FileCopy } from "@mui/icons-material";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import SyntaxHighlighter from "react-syntax-highlighter";
-import {
-	gruvboxDark,
-	gruvboxLight,
-} from "react-syntax-highlighter/dist/esm/styles/hljs";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import shell from "react-syntax-highlighter/dist/esm/languages/prism/shell-session";
-import { useTheme } from "@emotion/react";
-import { useEffect, useState, memo } from "react";
 import { DotfileSkeleton } from "components/Skeletons";
 
-const Dotfiles = memo(function Dotfiles() {
+import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter";
+import gruvboxDark from "react-syntax-highlighter/dist/esm/styles/prism/gruvbox-dark";
+import shellSession from "react-syntax-highlighter/dist/esm/languages/prism/shell-session";
+import { useTheme } from "@emotion/react";
+
+SyntaxHighlighter.registerLanguage("shell", shellSession);
+
+const HighlightedCode = memo(function HighlightedCode({ code }) {
 	const theme = useTheme();
+	return (
+		<SyntaxHighlighter
+			showLineNumbers
+			language="shell"
+			style={gruvboxDark}
+			customStyle={{
+				fontSize: [theme.fontSize.sm],
+				borderBottomLeftRadius: [theme.radius.md],
+				borderBottomRightRadius: [theme.radius.md],
+				width: "100%",
+				margin: "0",
+			}}
+		>
+			{code}
+		</SyntaxHighlighter>
+	);
+});
+
+export default function Dotfiles() {
 	const queryClient = useQueryClient();
 
 	// State to control when to enable the query
@@ -154,25 +174,10 @@ const Dotfiles = memo(function Dotfiles() {
 								</CopyToClipboard>
 							</ButtonGroup>
 						</Stack>
-						<SyntaxHighlighter
-							showLineNumbers
-							language={shell}
-							style={theme.palette.mode === "dark" ? gruvboxDark : gruvboxLight}
-							customStyle={{
-								fontSize: [theme.fontSize.sm],
-								borderBottomLeftRadius: [theme.radius.md],
-								borderBottomRightRadius: [theme.radius.md],
-								width: "100%",
-								margin: 0,
-							}}
-						>
-							{d}
-						</SyntaxHighlighter>
+						<HighlightedCode code={d} style={{ margin: 0 }} />
 					</CardOverflow>
 				))}
 			</Stack>
 		</>
 	);
-});
-
-export default Dotfiles;
+}
