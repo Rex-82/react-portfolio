@@ -5,7 +5,6 @@ import {
 	Tooltip,
 	ButtonGroup,
 	CardOverflow,
-	Divider,
 } from "@mui/joy";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, memo } from "react";
@@ -14,7 +13,7 @@ import { OpenInNew, FileCopy } from "@mui/icons-material";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { DotfileSkeleton } from "components/Skeletons";
 
-import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter";
+import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import gruvboxDark from "react-syntax-highlighter/dist/esm/styles/prism/gruvbox-dark";
 import shellSession from "react-syntax-highlighter/dist/esm/languages/prism/shell-session";
 import { useTheme } from "@emotion/react";
@@ -41,7 +40,7 @@ const HighlightedCode = memo(function HighlightedCode({ code }) {
 	);
 });
 
-export default function Dotfiles() {
+export default function Dotfiles({ children }) {
 	const queryClient = useQueryClient();
 
 	// State to control when to enable the query
@@ -103,7 +102,7 @@ export default function Dotfiles() {
 		if (status === "pending") {
 			return (
 				<>
-					<Typography level="title1">Dotfiles</Typography>
+					{children}
 					<Stack direction="column" spacing={2}>
 						<DotfileSkeleton />
 						<DotfileSkeleton />
@@ -121,13 +120,7 @@ export default function Dotfiles() {
 	}
 	return (
 		<>
-			<Typography level="title1" padding="0.5rem">
-				Dotfiles
-			</Typography>
-			<Divider orientation="horizontal" />
-			<Typography level="body" padding="0.5rem">
-				Below you can find the dotfiles used on my system.
-			</Typography>
+			{children}
 			<Stack direction="column" spacing={2}>
 				{data.map((d, i) => (
 					<CardOverflow
@@ -168,9 +161,11 @@ export default function Dotfiles() {
 									</IconButton>
 								</Tooltip>
 								<CopyToClipboard text={d}>
-									<IconButton>
-										<FileCopy />
-									</IconButton>
+									<Tooltip arrow title="Copy to clipboard">
+										<IconButton>
+											<FileCopy />
+										</IconButton>
+									</Tooltip>
 								</CopyToClipboard>
 							</ButtonGroup>
 						</Stack>

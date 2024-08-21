@@ -20,12 +20,11 @@ import { OpenInNew, FileCopy } from "@mui/icons-material";
 //    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.6), transparent);
 //}
 
+import PageDesc from "./PageDesc";
+
 export function ProjectSkeleton() {
 	return (
 		<Card>
-			<Typography level="title2">
-				<Skeleton>Project-skeleton</Skeleton>
-			</Typography>
 			<Skeleton
 				variant="rectangular"
 				width="100%"

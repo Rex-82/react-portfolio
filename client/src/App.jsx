@@ -9,6 +9,7 @@ const queryClient = new QueryClient();
 import Home from "pages/Home";
 import NotFound from "pages/NotFound";
 import Dotfiles from "pages/Dotfiles";
+import PageDesc from "components/PageDesc";
 // import ThemeTypography from "./components/storybooks/ThemeTypography";
 
 import Header from "components/Header";
@@ -26,8 +27,28 @@ export default function App() {
 					<Router>
 						<Header />
 						<Routes>
-							<Route path="/" element={<Home />} />
-							<Route path="/dotfiles" element={<Dotfiles />} />
+							<Route
+								path="/"
+								element={
+									<Home>
+										<PageDesc
+											title="Projects"
+											description="Here are some projects I worked on"
+										/>
+									</Home>
+								}
+							/>
+							<Route
+								path="/dotfiles"
+								element={
+									<Dotfiles>
+										<PageDesc
+											title="Dotfiles"
+											description="Below you can see the files i use in my linux system"
+										/>
+									</Dotfiles>
+								}
+							/>
 							{/* <Route path="/typography" element={<ThemeTypography />} /> */}
 							<Route path="*" element={<NotFound />} />
 						</Routes>

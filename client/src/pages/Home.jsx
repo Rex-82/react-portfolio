@@ -1,16 +1,10 @@
 import Projects from "components/Projects";
 import { Typography, Divider } from "@mui/joy";
 
-export default function Home() {
+export default function Home({ children }) {
 	return (
 		<>
-			<Typography level="title1" padding="0.5rem">
-				Simone Ferretti
-			</Typography>
-			<Divider orientation="horizontal" />
-			<Typography level="title2" padding="0.5rem">
-				Projects
-			</Typography>
+			{children}
 			<Projects />
 		</>
 	);
