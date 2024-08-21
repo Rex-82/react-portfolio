@@ -6,8 +6,8 @@ import {
 	ButtonGroup,
 	CardOverflow,
 } from "@mui/joy";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState, memo } from "react";
+import { useQueries, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState, memo, useCallback } from "react";
 
 import { OpenInNew, FileCopy } from "@mui/icons-material";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -45,6 +45,7 @@ export default function Dotfiles({ children }) {
 
 	// State to control when to enable the query
 	const [isQueryEnabled, setIsQueryEnabled] = useState(false);
+	const data = true;
 
 	// useEffect to enable the query on the first render
 	useEffect(() => {
@@ -65,10 +66,10 @@ export default function Dotfiles({ children }) {
 		http: "www.github.com",
 	};
 
-	const urls = files.map(
-		(file) =>
-			`https://${domain.api}/repos/${repo}/contents/${file.path}?ref=${branch}`,
-	);
+	const urls = files.map((file, i) => ({
+		url: `https://${domain.api}/repos/${repo}/contents/${file.path}?ref=${branch}`,
+		isCached: queryClient.getQueryData(`dotfile-${i}`),
+	}));
 
 	// Function to fetch file content
 	const fetchFileContent = async (url) => {
@@ -83,95 +84,90 @@ export default function Dotfiles({ children }) {
 		return response.text();
 	};
 
-	// Check if data is already in cache
-	let data = queryClient.getQueryData("dotfilesData");
-
 	// Use useQuery to fetch the data if it's not in cache
-	const {
-		status,
-		data: queryData,
-		error,
-	} = useQuery({
-		queryKey: ["dotfilesData"],
-		queryFn: () => Promise.all(urls.map(fetchFileContent)),
-		staleTime: 1000 * 60 * 60, // 1 hour in milliseconds
-		enabled: isQueryEnabled && !data, // Enable the query based on state
+	const codeQueries = useQueries({
+		queries: urls.map((url, i) => {
+			return {
+				queryKey: ["dotfile", i],
+				queryFn: async () => await fetchFileContent(url.url),
+				staleTime: 1000 * 60 * 60, // 1 hour in milliseconds
+				enabled: url.isCached,
+			};
+		}),
+		combine: (results) => {
+			console.log("results:", results);
+
+			return results.map((res) => ({ data: res.data, status: res.status }));
+		},
 	});
 
-	if (!data) {
-		if (status === "pending") {
-			return (
-				<>
-					{children}
-					<Stack direction="column" spacing={2}>
-						<DotfileSkeleton />
-						<DotfileSkeleton />
-						<DotfileSkeleton />
-					</Stack>
-				</>
-			);
-		}
-		if (status === "error") {
-			return `An error has occurred: ${error.message}`;
-		}
-
-		// Save the fetched data to the variable `data`
-		data = queryData;
-	}
 	return (
 		<>
 			{children}
 			<Stack direction="column" spacing={2}>
-				{data.map((d, i) => (
-					<CardOverflow
-						key={i}
-						sx={{
-							flexDirection: "column",
-							alignSelf: "center",
-							maxWidth: "95%",
-						}}
-					>
-						<Stack
-							direction="row"
-							alignItems="center"
-							width="100%"
-							sx={(theme) => ({
-								borderTopRightRadius: [theme.radius.md],
-								borderTopLeftRadius: [theme.radius.md],
-								backgroundColor: [theme.palette.background.level2],
-								paddingLeft: "0.5em",
-								paddingRight: "0.625em",
-							})}
-							justifyContent="space-between"
-						>
-							<Typography level="callout">{files[i].name}</Typography>
-							<ButtonGroup
-								size="sm"
-								sx={(theme) => ({
-									borderRadius: [theme.radius.lg],
-								})}
+				{codeQueries?.map((d, i) => {
+					if (d.status === "pending") {
+						return <DotfileSkeleton key={i} />;
+					}
+					if (d.status === "error") {
+						return `An error has occurred: ${d.error.message}`;
+					}
+
+					if (d.status === "success") {
+						// Save the fetched data to the variable `data`
+
+						return (
+							<CardOverflow
+								key={i}
+								sx={{
+									flexDirection: "column",
+									alignSelf: "center",
+									maxWidth: "95%",
+								}}
 							>
-								<Tooltip arrow title="Go to github repository">
-									<IconButton
-										component="a"
-										href={`https://${domain.http}/${repo}/tree/${branch}`}
-										target="_blank"
+								<Stack
+									direction="row"
+									alignItems="center"
+									width="100%"
+									sx={(theme) => ({
+										borderTopRightRadius: [theme.radius.md],
+										borderTopLeftRadius: [theme.radius.md],
+										backgroundColor: [theme.palette.background.level2],
+										paddingLeft: "0.5em",
+										paddingRight: "0.625em",
+									})}
+									justifyContent="space-between"
+								>
+									<Typography level="callout">{files[i].name}</Typography>
+									<ButtonGroup
+										size="sm"
+										sx={(theme) => ({
+											borderRadius: [theme.radius.lg],
+										})}
 									>
-										<OpenInNew />
-									</IconButton>
-								</Tooltip>
-								<CopyToClipboard text={d}>
-									<Tooltip arrow title="Copy to clipboard">
-										<IconButton>
-											<FileCopy />
-										</IconButton>
-									</Tooltip>
-								</CopyToClipboard>
-							</ButtonGroup>
-						</Stack>
-						<HighlightedCode code={d} style={{ margin: 0 }} />
-					</CardOverflow>
-				))}
+										<Tooltip arrow title="Go to github repository">
+											<IconButton
+												component="a"
+												href={`https://${domain.http}/${repo}/tree/${branch}`}
+												target="_blank"
+											>
+												<OpenInNew />
+											</IconButton>
+										</Tooltip>
+										<CopyToClipboard text={d.data}>
+											<Tooltip arrow title="Copy to clipboard">
+												<IconButton>
+													<FileCopy />
+												</IconButton>
+											</Tooltip>
+										</CopyToClipboard>
+									</ButtonGroup>
+								</Stack>
+								<HighlightedCode code={d.data} style={{ margin: 0 }} />
+							</CardOverflow>
+						);
+					}
+				})}
 			</Stack>
 		</>
 	);
