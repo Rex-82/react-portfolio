@@ -4,7 +4,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
 export default function Header() {
-	const { hash, pathname, search } = useLocation();
+	const { pathname } = useLocation();
 
 	const links = [
 		{ name: "home", href: "/" },

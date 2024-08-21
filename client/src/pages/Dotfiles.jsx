@@ -43,15 +43,6 @@ const HighlightedCode = memo(function HighlightedCode({ code }) {
 export default function Dotfiles({ children }) {
 	const queryClient = useQueryClient();
 
-	// State to control when to enable the query
-	const [isQueryEnabled, setIsQueryEnabled] = useState(false);
-	const data = true;
-
-	// useEffect to enable the query on the first render
-	useEffect(() => {
-		setIsQueryEnabled(true);
-	}, []);
-
 	const repo = "Rex-82/dotfiles";
 	const branch = "main";
 
@@ -84,7 +75,6 @@ export default function Dotfiles({ children }) {
 		return response.text();
 	};
 
-	// Use useQuery to fetch the data if it's not in cache
 	const codeQueries = useQueries({
 		queries: urls.map((url, i) => {
 			return {
@@ -114,8 +104,6 @@ export default function Dotfiles({ children }) {
 					}
 
 					if (d.status === "success") {
-						// Save the fetched data to the variable `data`
-
 						return (
 							<CardOverflow
 								key={i}
