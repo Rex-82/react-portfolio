@@ -56,6 +56,7 @@ export default function Projects() {
 					<Project
 						key={repo.id}
 						title={repo.name}
+						homepage={repo.homepage}
 						url={repo.html_url}
 						description={repo.description}
 						topics={repo.topics}
