@@ -16,17 +16,23 @@ export default function Header() {
 			component="header"
 			sx={(theme) => ({
 				zIndex: [theme.zIndex.popup],
-				padding: "1em 0",
+				py: "1em",
 				backdropFilter: "blur(5px)",
-				backgroundColor: [theme.palette.background.backdrop],
-				borderBottomWidth: [theme.lineHeight.md],
+				borderBottomWidth: "1px",
 				borderBottomStyle: "solid",
 				borderBottomColor: [theme.palette.divider],
 			})}
 			position="sticky"
 			top={0}
 		>
-			<Stack direction="row" justifyContent="space-between" spacing={2}>
+			<Stack
+				direction="row"
+				justifyContent="space-between"
+				alignItems="center"
+				spacing={2}
+				px="1rem"
+				height="1rem"
+			>
 				<Box component="nav">
 					{links.map((link, i) => {
 						return (
