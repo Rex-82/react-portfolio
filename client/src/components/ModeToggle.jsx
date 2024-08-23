@@ -1,41 +1,85 @@
 import { useColorScheme } from "@mui/joy/styles";
-import { Chip } from "@mui/joy";
-import { LightMode, ModeNight, Adjust } from "@mui/icons-material";
+import { Radio, RadioGroup } from "@mui/joy";
+import {
+	LightModeOutlined,
+	ModeNightOutlined,
+	DesktopWindowsOutlined,
+} from "@mui/icons-material";
 
 export default function ModeToggle() {
 	const { mode, setMode } = useColorScheme();
 
-	const states = {
-		light: {
-			name: "Light theme",
-			icon: <LightMode />,
+	const states = [
+		{
+			name: "light",
+			icon: <LightModeOutlined />,
 		},
-		dark: {
-			name: "Dark theme",
-			icon: <ModeNight />,
+		{
+			name: "dark",
+			icon: <ModeNightOutlined />,
 		},
-		system: {
-			name: "System theme",
-			icon: <Adjust />,
+		{
+			name: "system",
+			icon: <DesktopWindowsOutlined />,
 		},
-	};
-
-	const stateCycle = ["light", "dark", "system"];
-
-	function changeState() {
-		const nextState =
-			stateCycle[(stateCycle.indexOf(mode) + 1) % stateCycle.length];
-
-		setMode(nextState);
-	}
+	];
 
 	return (
-		<Chip
-			variant="soft"
-			startDecorator={states[mode].icon}
-			onClick={changeState}
+		<RadioGroup
+			orientation="horizontal"
+			aria-labelledby="theme mode selector"
+			name="mode"
+			value={mode}
+			onChange={(event) => setMode(event.target.value)}
+			sx={(theme) => ({
+				borderRadius: "2rem",
+				height: "1.5rem",
+				bgcolor: theme.palette.background.surface,
+				display: "flex",
+				alignItems: "center",
+				py: "0.75em",
+			})}
+			variant="outlined"
+			size="sm"
 		>
-			{states[mode].name}
-		</Chip>
+			{states.map((item) => (
+				<Radio
+					key={item.name}
+					color="neutral"
+					value={item.name}
+					uncheckedIcon={item.icon}
+					checkedIcon={item.icon}
+					variant="plain"
+					size="sm"
+					sx={(theme) => ({
+						padding: "0.125em",
+						margin: "0.325em",
+						"& .MuiSvgIcon-root": {
+							transition: "color 0.3s",
+							color: theme.palette.neutral.solidDisabledColor,
+						},
+						"&:hover .MuiSvgIcon-root": {
+							color: theme.palette.text.primary,
+						},
+						"&.Mui-checked .MuiSvgIcon-root": {
+							color: theme.palette.text.primary,
+						},
+					})}
+					slotProps={{
+						action: ({ checked }) => ({
+							sx: (theme) => ({
+								borderRadius: "1rem",
+								height: "1.25rem",
+								width: "1.25rem",
+								...(checked && {
+									bgcolor: theme.palette.neutral.solidBg,
+									opacity: "40%",
+								}),
+							}),
+						}),
+					}}
+				/>
+			))}
+		</RadioGroup>
 	);
 }
