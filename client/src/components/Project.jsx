@@ -5,12 +5,14 @@ export default function Project({ title, homepage, url, description, topics }) {
 
 	return (
 		<Card
-		//sx={{
-		//	position: { sm: "relative" },
-		//	"&:hover": {
-		//		bottom: { sm: "10px" },
-		//	},
-		//}}
+			sx={{
+				//position: { sm: "relative" },
+				//"&:hover": {
+				//	bottom: { sm: "10px" },
+				//},
+				width: { xl: "50%", lg: "60%", md: "80%", xs: "100%" },
+				margin: { xs: "0.5rem" },
+			}}
 		>
 			<Stack
 				direction="row"
@@ -18,15 +20,36 @@ export default function Project({ title, homepage, url, description, topics }) {
 				gap={1}
 				flexWrap="wrap"
 			>
-				<Link overlay underline="none" title={title} href={url}>
-					<Typography level="title2">{title}</Typography>
+				<Link
+					overlay
+					underline="none"
+					title={title}
+					href={url}
+					target="_blank"
+					rel="noopener"
+				>
+					<Typography
+						level="title2"
+						sx={(theme) => ({
+							color: [theme.palette.text.secondary],
+						})}
+					>
+						{title}
+					</Typography>
 				</Link>
-				<Link title={homepage} href={homepage}>
+				<Link title={homepage} href={homepage} target="_blank" rel="noopener">
 					<Typography level="body">{site}</Typography>
 				</Link>
 			</Stack>
 
-			<Typography level="callout">{description}</Typography>
+			<Typography
+				sx={(theme) => ({
+					color: [theme.palette.text.tertiary],
+				})}
+				level="callout"
+			>
+				{description}
+			</Typography>
 			<Stack direction="row" gap={1} flexWrap="wrap">
 				{topics?.map((topic, i) => (
 					<Chip variant="outlined" key={i}>

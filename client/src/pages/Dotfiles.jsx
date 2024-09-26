@@ -28,11 +28,20 @@ const HighlightedCode = memo(function HighlightedCode({ code }) {
 			language="shell"
 			style={gruvboxDark}
 			customStyle={{
+				position: "relative",
 				fontSize: [theme.fontSize.sm],
 				borderBottomLeftRadius: [theme.radius.md],
 				borderBottomRightRadius: [theme.radius.md],
 				width: "100%",
 				margin: "0",
+				paddingLeft: 0,
+			}}
+			lineNumberStyle={{
+				position: "sticky",
+				left: 0,
+				borderRight: "1px solid #282828",
+				marginRight: "0.5rem",
+				backgroundColor: "#1d2021",
 			}}
 		>
 			{code}
@@ -109,8 +118,8 @@ export default function Dotfiles({ children }) {
 								key={i}
 								sx={{
 									flexDirection: "column",
-									alignSelf: "center",
-									maxWidth: "95%",
+									alignSelf: { md: "center" },
+									maxWidth: { md: "80%", lg: "70%", xl: "70%" },
 								}}
 							>
 								<Stack

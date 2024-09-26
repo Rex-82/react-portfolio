@@ -48,7 +48,7 @@ export default function Projects() {
 	}
 
 	return (
-		<Stack direction="column" spacing={2}>
+		<Stack alignItems="center">
 			{data
 				?.filter((repo) => !repo.fork && repo.description !== null)
 				.sort((a, b) => b.updated_at.localeCompare(a.updated_at))
